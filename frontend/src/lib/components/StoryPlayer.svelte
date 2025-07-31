@@ -1,19 +1,43 @@
 <script>
-  export let generatedStory;
-  export let isGenerating;
+  export let story = {
+    text: 'Default story text',
+    choices: [],
+    image: 'https://via.placeholder.com/500x200'
+  };
 </script>
 
-{#if generatedStory}
-  <div class="story-display">
-    <h2>{generatedStory.title}</h2>
-    <div class="chapter">
-      <p>{generatedStory.chapters[0].text}</p>
-      <div class="choices">
-        {#each generatedStory.chapters[0].choices as choice}
-          <button class="choice-btn">{choice.text}</button>
-        {/each}
-      </div>
-    </div>
-    <button on:click={() => generatedStory = null}>Generate New Story</button>
+<div class="story-player">
+  {#if story.image}
+    <img src={story.image} alt="Story illustration" role="img">
+  {/if}
+  <p>{story.text}</p>
+  <div class="choices">
+    {#each (story.choices || []) as choice}
+      <button class="choice-btn">{choice}</button>
+    {/each}
   </div>
-{/if}
+</div>
+
+<style>
+  .story-display {
+    margin: 2rem auto;
+    max-width: 500px;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .choices {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .choice-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+  }
+</style>

@@ -3,21 +3,13 @@ import StoryPlayer from '$lib/components/StoryPlayer.svelte';
 
 it('renders the story player', () => {
   const story = {
-    title: 'Test Story',
-    chapters: [
-      {
-        id: 1,
-        text: 'Chapter 1',
-        choices: [
-          { id: 'a', text: 'Choice A' },
-          { id: 'b', text: 'Choice B' },
-        ],
-      },
-    ],
+    text: 'A cyberpunk detective walks through neon-lit streets.',
+    choices: ['Follow the suspect', 'Check the alley', 'Call for backup'],
+    image: 'https://example.com/cyberpunk.jpg'
   };
-  render(StoryPlayer, { generatedStory: story });
-  expect(screen.getByText('Test Story')).toBeInTheDocument();
-  expect(screen.getByText('Chapter 1')).toBeInTheDocument();
-  expect(screen.getByText('Choice A')).toBeInTheDocument();
-  expect(screen.getByText('Choice B')).toBeInTheDocument();
+  render(StoryPlayer, { story: story });
+  expect(screen.getByText('A cyberpunk detective walks through neon-lit streets.')).toBeInTheDocument();
+  expect(screen.getByText('Follow the suspect')).toBeInTheDocument();
+  expect(screen.getByText('Check the alley')).toBeInTheDocument();
+  expect(screen.getByText('Call for backup')).toBeInTheDocument();
 });
