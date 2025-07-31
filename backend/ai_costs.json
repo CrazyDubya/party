@@ -1,0 +1,104 @@
+{
+  "cost_history": [
+    {
+      "timestamp": 1753987655.433256,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 500,
+      "output_tokens": 1000,
+      "cost": 0.000338,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987673.255809,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 500,
+      "output_tokens": 1000,
+      "cost": 0.000338,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987748.9343748,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 500,
+      "output_tokens": 1000,
+      "cost": 0.000338,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987748.9347599,
+      "model": "anthropic/claude-3-haiku",
+      "input_tokens": 800,
+      "output_tokens": 1600,
+      "cost": 0.0022,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987748.9349399,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 300,
+      "output_tokens": 600,
+      "cost": 0.000202,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987748.9350898,
+      "model": "anthropic/claude-3-sonnet",
+      "input_tokens": 1200,
+      "output_tokens": 2400,
+      "cost": 0.0396,
+      "task_type": "story_generation",
+      "success": false
+    },
+    {
+      "timestamp": 1753987748.935245,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 400,
+      "output_tokens": 800,
+      "cost": 0.00027,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987906.92574,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 16,
+      "output_tokens": 294,
+      "cost": 8.9e-05,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987908.261371,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 20,
+      "output_tokens": 322,
+      "cost": 9.8e-05,
+      "task_type": "story_generation",
+      "success": true
+    },
+    {
+      "timestamp": 1753987909.6991968,
+      "model": "google/gemini-flash-1.5",
+      "input_tokens": 14,
+      "output_tokens": 348,
+      "cost": 0.000105,
+      "task_type": "story_generation",
+      "success": true
+    }
+  ],
+  "daily_budgets": {
+    "2025-07-31": {
+      "date": "2025-07-31",
+      "budget_limit": 25.0,
+      "current_spend": 0.043578000000000006,
+      "requests_made": 10,
+      "requests_failed": 1
+    }
+  },
+  "last_updated": 1753987909.699269
+}

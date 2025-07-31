@@ -1,0 +1,35 @@
+{
+  "mode": "real",
+  "created": "2025-07-31T14:49:08.935445",
+  "apis": {
+    "openrouter": {
+      "enabled": false,
+      "models": {
+        "simple": "google/gemini-flash-1.5",
+        "medium": "anthropic/claude-3-haiku",
+        "high": "anthropic/claude-3-sonnet"
+      }
+    },
+    "elevenlabs": {
+      "enabled": true,
+      "default_voice": "rachel",
+      "model": "eleven_flash_v2_5"
+    },
+    "image_generation": {
+      "enabled": false,
+      "preferred_provider": "runware",
+      "default_size": "512x512"
+    }
+  },
+  "cost_limits": {
+    "daily_budget": 50.0,
+    "story_max_cost": 0.05,
+    "tts_max_cost": 0.01,
+    "image_max_cost": 0.02
+  },
+  "quality_thresholds": {
+    "min_score": 70,
+    "min_human_likeness": 60,
+    "min_word_count": 500
+  }
+}
