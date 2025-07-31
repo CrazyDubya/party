@@ -213,13 +213,13 @@ class ElevenLabsClient:
         
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=timeout)) as session:
-            async with session.post(url, headers=headers, json=payload) as response:
+            response = await session.post(url, headers=headers, json=payload)
                 
-                if response.status != 200:
-                    error_text = await response.text()
-                    raise Exception(f"API request failed: {response.status} - {error_text}")
-                
-                return await response.read()
+            if response.status != 200:
+                error_text = await response.text()
+                raise Exception(f"API request failed: {response.status} - {error_text}")
+            
+            return await response.read()
     
     async def _save_audio_file(self, audio_data: bytes, file_path: str) -> str:
         """Save audio data to file"""

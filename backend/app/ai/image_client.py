@@ -280,28 +280,28 @@ class StableDiffusionClient:
         
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
-            async with session.post(url, headers=headers, json=payload) as response:
+            response = await session.post(url, headers=headers, json=payload)
                 
-                if response.status == 200:
-                    data = await response.json()
+            if response.status == 200:
+                data = await response.json()
+                
+                # Runware returns image URL
+                if data.get("data") and len(data["data"]) > 0:
+                    image_url = data["data"][0].get("imageURL")
                     
-                    # Runware returns image URL
-                    if data.get("data") and len(data["data"]) > 0:
-                        image_url = data["data"][0].get("imageURL")
-                        
-                        # Download image data
-                        image_data = await self._download_image(image_url)
-                        
-                        return {
-                            "success": True,
-                            "image_data": image_data,
-                            "image_url": image_url
-                        }
-                    else:
-                        return {"success": False, "error": "No image data in response"}
+                    # Download image data
+                    image_data = await self._download_image(image_url)
+                    
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": image_url
+                    }
                 else:
-                    error_text = await response.text()
-                    return {"success": False, "error": f"Runware API error: {response.status} - {error_text}"}
+                    return {"success": False, "error": "No image data in response"}
+            else:
+                error_text = await response.text()
+                return {"success": False, "error": f"Runware API error: {response.status} - {error_text}"}
     
     async def _generate_stability(
         self,
@@ -333,26 +333,26 @@ class StableDiffusionClient:
         
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
-            async with session.post(url, headers=headers, json=payload) as response:
+            response = await session.post(url, headers=headers, json=payload)
                 
-                if response.status == 200:
-                    data = await response.json()
+            if response.status == 200:
+                data = await response.json()
+                
+                # Stability AI returns base64 encoded image
+                if data.get("images") and len(data["images"]) > 0:
+                    image_b64 = data["images"][0].get("base64")
+                    image_data = base64.b64decode(image_b64)
                     
-                    # Stability AI returns base64 encoded image
-                    if data.get("images") and len(data["images"]) > 0:
-                        image_b64 = data["images"][0].get("base64")
-                        image_data = base64.b64decode(image_b64)
-                        
-                        return {
-                            "success": True,
-                            "image_data": image_data,
-                            "image_url": None
-                        }
-                    else:
-                        return {"success": False, "error": "No image data in response"}
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": None
+                    }
                 else:
-                    error_text = await response.text()  
-                    return {"success": False, "error": f"Stability AI error: {response.status} - {error_text}"}
+                    return {"success": False, "error": "No image data in response"}
+            else:
+                error_text = await response.text()  
+                return {"success": False, "error": f"Stability AI error: {response.status} - {error_text}"}
     
     async def _generate_segmind(
         self,
@@ -386,25 +386,26 @@ class StableDiffusionClient:
         
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
-            async with session.post(url, headers=headers, json=payload) as response:
+            response = await session.post(url, headers=headers, json=payload)
                 
-                if response.status == 200:
-                    data = await response.json()
+            if response.status == 200:
+                data = await response.json()
+                
+                # Segmind returns base64 encoded image
+                if data.get("image"):
+                    image_data = base64.b64decode(data["image"])
                     
-                    # Segmind returns base64 encoded image
-                    if data.get("image"):
-                        image_data = base64.b64decode(data["image"])
-                        
-                        return {
-                            "success": True,
-                            "image_data": image_data,
-                            "image_url": None
-                        }
-                    else:
-                        return {"success": False, "error": "No image data in response"}
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": None,
+                        "seed": data.get("seed")
+                    }
                 else:
-                    error_text = await response.text()
-                    return {"success": False, "error": f"Segmind API error: {response.status} - {error_text}"}
+                    return {"success": False, "error": "No image data in response"}
+            else:
+                error_text = await response.text()
+                return {"success": False, "error": f"Segmind API error: {response.status} - {error_text}"}
     
     async def _download_image(self, image_url: str) -> bytes:
         """Download image from URL"""

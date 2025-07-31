@@ -155,25 +155,25 @@ class OpenRouterClient:
         
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=timeout)) as session:
-            async with session.post(f"{self.base_url}/chat/completions", 
-                                   headers=headers, 
-                                   json=payload) as response:
-                
-                if response.status != 200:
-                    error_text = await response.text()
-                    raise Exception(f"API request failed: {response.status} - {error_text}")
-                
-                result = await response.json()
-                
-                # Track request
-                self.total_requests += 1
-                request_time = time.time() - start_time
-                
-                # Add timing info
-                result["request_time"] = request_time
-                result["model"] = model.value
-                
-                return result
+            response = await session.post(f"{self.base_url}/chat/completions",
+                                   headers=headers,
+                                   json=payload)
+            
+            if response.status != 200:
+                error_text = await response.text()
+                raise Exception(f"API request failed: {response.status} - {error_text}")
+            
+            result = await response.json()
+            
+            # Track request
+            self.total_requests += 1
+            request_time = time.time() - start_time
+            
+            # Add timing info
+            result["request_time"] = request_time
+            result["model"] = model.value
+            
+            return result
 
     def _build_story_prompt(self, premise: str, mood: str, characters: str) -> str:
         """Build optimized prompt for story generation"""

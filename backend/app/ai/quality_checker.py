@@ -28,10 +28,11 @@ class QualityResult:
     """Quality check result"""
     valid: bool
     score: float  # 0-100
-    issues: List[Dict]
-    suggestions: List[str]
-    word_count: int
     human_likeness_score: float
+    word_count: int
+    issues: List[Dict]
+    ai_patterns_detected: int
+    readability_score: float
 
 
 class StoryQualityChecker:
@@ -81,7 +82,7 @@ class StoryQualityChecker:
                 "message": "Story has no chapters",
                 "severity": "critical"
             })
-            return QualityResult(False, 0, issues, ["Regenerate story with proper structure"], 0, 0)
+            return QualityResult(False, 0, issues, [], 0, 0)
         
         # Word count check
         word_count = self._count_total_words(story)
@@ -126,6 +127,9 @@ class StoryQualityChecker:
         # Calculate overall quality score
         quality_score = self._calculate_quality_score(issues, word_count, human_likeness)
         
+        # Calculate readability score
+        readability_score = self._calculate_readability(story)
+        
         # Determine if story passes quality check
         critical_issues = [issue for issue in issues if issue.get("severity") == "critical"]
         valid = len(critical_issues) == 0 and quality_score >= 70
@@ -133,10 +137,11 @@ class StoryQualityChecker:
         return QualityResult(
             valid=valid,
             score=quality_score,
-            issues=issues,
-            suggestions=suggestions,
+            human_likeness_score=human_likeness,
             word_count=word_count,
-            human_likeness_score=human_likeness
+            issues=issues,
+            ai_patterns_detected=len(ai_issues),
+            readability_score=readability_score
         )
     
     def _count_total_words(self, story: Dict) -> int:
@@ -327,6 +332,38 @@ class StoryQualityChecker:
         
         return max(0, min(100, final_score))
 
+
+    def _calculate_readability(self, story: Dict) -> float:
+        """Calculate readability score (Flesch-Kincaid for now)"""
+        all_text = " ".join([
+            chapter.get("text", "") for chapter in story.get("chapters", [])
+        ])
+        
+        # Flesch-Kincaid formula
+        words = all_text.split()
+        num_words = len(words)
+        num_sentences = len(re.findall(r'[.!?]+', all_text))
+        
+        if num_words == 0 or num_sentences == 0:
+            return 0.0
+        
+        # Syllable counting (simple approximation)
+        syllables = 0
+        for word in words:
+            word = word.lower()
+            count = len(re.findall('[aeiouy]+', word))
+            # Edge cases for syllable counting
+            if word.endswith("e"): count -=1
+            if word.endswith("le") and len(word) > 2 and word[-3] not in "aeiouy": count += 1
+            if count == 0: count = 1
+            syllables += count
+            
+        try:
+            score = 206.835 - 1.015 * (num_words / num_sentences) - 84.6 * (syllables / num_words)
+        except ZeroDivisionError:
+            return 0.0
+            
+        return max(0, min(100, score))
 
 # Global quality checker instance
 quality_checker = StoryQualityChecker()
