@@ -213,7 +213,7 @@ settings=settings
         
         for provider in priority:
             if self._is_provider_available(provider):
-return provider
+                return provider
         
         return None
     
@@ -245,8 +245,8 @@ return provider
             return await self._generate_stability(prompt, size, model, settings)
         elif provider == ImageProvider.SEGMIND:
             return await self._generate_segmind(prompt, size, model, settings)
-    else:
-        return {"success": False, "error": "Unknown provider"}
+        else:
+            return {"success": False, "error": "Unknown provider"}
     
     async def _generate_runware(
         self,
@@ -282,24 +282,24 @@ return provider
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
             if response.status == 200:
-data = await response.json()
+                data = await response.json()
 
-# Runware returns image URL
-if data.get("data") and len(data["data"]) > 0:
-image_url = data["data"][0].get("imageURL")
-    
-# Download image data
-image_data = await self._download_image(image_url)
-    
-                return {
-    "success": True,
-    "image_data": image_data,
-    "image_url": image_url
-                }
+                # Runware returns image URL
+                if data.get("data") and len(data["data"]) > 0:
+                    image_url = data["data"][0].get("imageURL")
+                    
+                    # Download image data
+                    image_data = await self._download_image(image_url)
+                    
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": image_url
+                    }
+                else:
+                    return {"success": False, "error": "No image data in response"}
             else:
-                return {"success": False, "error": "No image data in response"}
-            else:
-error_text = await response.text()
+                error_text = await response.text()
                 return {"success": False, "error": f"Runware API error: {response.status} - {error_text}"}
     
     async def _generate_stability(
@@ -334,22 +334,22 @@ error_text = await response.text()
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
             if response.status == 200:
-data = await response.json()
+                data = await response.json()
 
-# Stability AI returns base64 encoded image
-if data.get("images") and len(data["images"]) > 0:
-    image_b64 = data["images"][0].get("base64")
-    image_data = base64.b64decode(image_b64)
-    
-                return {
-        "success": True,
-        "image_data": image_data,
-        "image_url": None
-    }
+                # Stability AI returns base64 encoded image
+                if data.get("images") and len(data["images"]) > 0:
+                    image_b64 = data["images"][0].get("base64")
+                    image_data = base64.b64decode(image_b64)
+                    
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": None
+                    }
+                else:
+                    return {"success": False, "error": "No image data in response"}
             else:
-                return {"success": False, "error": "No image data in response"}
-            else:
-error_text = await response.text()  
+                error_text = await response.text()  
                 return {"success": False, "error": f"Stability AI error: {response.status} - {error_text}"}
     
     async def _generate_segmind(
@@ -386,22 +386,22 @@ error_text = await response.text()
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
             if response.status == 200:
-data = await response.json()
+                data = await response.json()
 
-# Segmind returns base64 encoded image
-if data.get("image"):
-    image_data = base64.b64decode(data["image"])
-    
-                return {
-        "success": True,
-        "image_data": image_data,
-        "image_url": None,
-        "seed": data.get("seed")
-    }
+                # Segmind returns base64 encoded image
+                if data.get("image"):
+                    image_data = base64.b64decode(data["image"])
+                    
+                    return {
+                        "success": True,
+                        "image_data": image_data,
+                        "image_url": None,
+                        "seed": data.get("seed")
+                    }
+                else:
+                    return {"success": False, "error": "No image data in response"}
             else:
-                return {"success": False, "error": "No image data in response"}
-            else:
-error_text = await response.text()
+                error_text = await response.text()
                 return {"success": False, "error": f"Segmind API error: {response.status} - {error_text}"}
     
     async def _download_image(self, image_url: str) -> bytes:
@@ -410,8 +410,8 @@ error_text = await response.text()
         connector = aiohttp.TCPConnector(ssl=False)
         async with aiohttp.ClientSession(connector=connector) as session:
             response = await session.get(image_url)
-response.raise_for_status()
-return await response.read()
+            response.raise_for_status()
+            return await response.read()
     
     async def _save_image_file(self, image_data: bytes, file_path: str) -> str:
         """Save image data to file"""
@@ -434,7 +434,7 @@ return await response.read()
             for provider, count in self.provider_usage.items()
         }
         
-    return {
+        return {
             "total_requests": self.requests_made,
             "total_images": self.total_images,
             "total_cost": round(self.total_cost, 4),
@@ -456,18 +456,18 @@ return await response.read()
         )
         
         if result["success"]:
-        return {
-                    "success": True,
-"message": "Image generation connection successful",
-"provider_used": result["provider"],
-"generation_time": result["generation_time"],
-"cost": result["usage"].total_cost
+            return {
+                "success": True,
+                "message": "Image generation connection successful",
+                "provider_used": result["provider"],
+                "generation_time": result["generation_time"],
+                "cost": result["usage"].total_cost
             }
-    else:
-        return {
-"success": False,
-"error": result["error"],
-"suggestion": "Check API keys and internet connection"
+        else:
+            return {
+                "success": False,
+                "error": result["error"],
+                "suggestion": "Check API keys and internet connection"
             }
 
 
@@ -535,9 +535,9 @@ async def example_usage():
     else:
             print(f"Generation failed: {result['error']}")
         
-        # Print usage stats
-        stats = client.get_usage_stats()
-        print("Usage stats:", stats)
+    # Print usage stats
+    stats = client.get_usage_stats()
+    print("Usage stats:", stats)
 
 
 if __name__ == "__main__":

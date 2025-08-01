@@ -3,7 +3,7 @@
   "created": "2025-07-31T14:49:08.935445",
   "apis": {
     "openrouter": {
-      "enabled": false,
+      "enabled": true,
       "models": {
         "simple": "google/gemini-flash-1.5",
         "medium": "anthropic/claude-3-haiku",
@@ -16,9 +16,10 @@
       "model": "eleven_flash_v2_5"
     },
     "image_generation": {
-      "enabled": false,
+      "enabled": true,
       "preferred_provider": "runware",
-      "default_size": "512x512"
+      "default_size": "768x768",
+      "api_key_configured": true
     }
   },
   "cost_limits": {

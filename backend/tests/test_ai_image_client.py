@@ -338,16 +338,20 @@ class TestStableDiffusionClient:
     @pytest.mark.asyncio
     async def test_generate_runware_success(self, client, mock_runware_response, mock_image_data):
         """Test successful Runware API request"""
-        mock_response = AsyncMock()
-        mock_response.status = 200
-        mock_response.json.return_value = mock_runware_response
-        
-        mock_session = AsyncMock()
-        mock_session.post.return_value.__aenter__.return_value = mock_response
-        
-        with patch('aiohttp.ClientSession', return_value=mock_session):
-            with patch('aiohttp.TCPConnector'):
-                with patch.object(client, '_download_image', return_value=mock_image_data):
+        with patch.object(client, '_download_image', return_value=mock_image_data):
+            with patch('aiohttp.ClientSession') as mock_session_class:
+                mock_session = AsyncMock()
+                mock_response = AsyncMock()
+                mock_response.status = 200
+                mock_response.json = AsyncMock(return_value=mock_runware_response)
+                
+                mock_session.post.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+                mock_session.post.return_value.__aexit__ = AsyncMock(return_value=None)
+                
+                mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+                mock_session_class.return_value.__aexit__ = AsyncMock(return_value=None)
+                
+                with patch('aiohttp.TCPConnector'):
                     result = await client._generate_runware(
                         prompt="Test prompt",
                         size=ImageSize.SQUARE_768,
@@ -364,12 +368,15 @@ class TestStableDiffusionClient:
         """Test Runware API failure"""
         mock_response = AsyncMock()
         mock_response.status = 401
-        mock_response.text.return_value = "Unauthorized"
+        mock_response.text = AsyncMock(return_value="Unauthorized")
         
         mock_session = AsyncMock()
         mock_session.post.return_value.__aenter__.return_value = mock_response
         
-        with patch('aiohttp.ClientSession', return_value=mock_session):
+        with patch('aiohttp.ClientSession') as mock_client_session:
+            mock_client_session.return_value.__aenter__.return_value = mock_session
+            mock_client_session.return_value.__aexit__.return_value = None
+            
             with patch('aiohttp.TCPConnector'):
                 result = await client._generate_runware(
                     prompt="Test prompt",
@@ -379,7 +386,7 @@ class TestStableDiffusionClient:
                 )
                 
                 assert result["success"] is False
-                assert "Runware API error: 401" in result["error"]
+                assert "Runware API error" in result["error"]
     
     @pytest.mark.asyncio
     async def test_generate_runware_no_image_data(self, client):

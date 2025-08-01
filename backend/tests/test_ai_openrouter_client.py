@@ -234,7 +234,7 @@ class TestOpenRouterClient:
         }
         
         word_count = client._count_words(story_data)
-        assert word_count == 19
+        assert word_count == 15  # Actual word count: "This is chapter one with ten words total" (8) + "This is chapter two with nine words" (7) = 15
     
     def test_count_words_empty(self, client):
         """Test word counting with empty chapters"""
