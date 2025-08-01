@@ -467,7 +467,7 @@ Our agent system represents the future of collaborative software development - w
 
 ## 📚 Additional Resources
 
-- [Agent Personality Development Guide](./project-notes/docs/agent-personality-guide.md)
+- Agent Personality Development Guide (under development)
 - [Communication Protocol Reference](./project-notes/docs/communication-protocols.md)
 - [Performance Optimization Playbook](./project-notes/docs/performance-optimization.md)
 - [Collaboration Framework Manual](./project-notes/docs/collaboration-frameworks.md)
