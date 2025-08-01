@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(RUNWARE_API_KEY=\"qnH74DLE9x7Y3yaNUX8fqaRip3qyQL5R\" python3 image_generation_working.py)"
+      "Bash(RUNWARE_API_KEY=\"qnH74DLE9x7Y3yaNUX8fqaRip3qyQL5R\" python3 image_generation_working.py)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
