@@ -1,0 +1,85 @@
+{
+  "cost_history": [
+    {
+      "timestamp": 1754016217.436426,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 42,
+      "output_size": 128,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.37192797660827637
+    },
+    {
+      "timestamp": 1754016220.9989219,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 51,
+      "output_size": 1167,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.39720797538757324
+    },
+    {
+      "timestamp": 1754016224.839603,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 44,
+      "output_size": 1142,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.4822568893432617
+    },
+    {
+      "timestamp": 1754016228.60671,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 49,
+      "output_size": 1237,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.3558647632598877
+    },
+    {
+      "timestamp": 1754016450.106411,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 108,
+      "output_size": 1228,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.517902135848999
+    },
+    {
+      "timestamp": 1754016453.0062568,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 89,
+      "output_size": 989,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.3330869674682617
+    },
+    {
+      "timestamp": 1754016456.025493,
+      "service": "openrouter",
+      "request_type": "text_generation",
+      "input_size": 89,
+      "output_size": 970,
+      "cost": 0.0,
+      "success": true,
+      "processing_time": 0.4613790512084961
+    }
+  ],
+  "daily_budgets": {
+    "openrouter_2025-07-31": {
+      "date": "2025-07-31",
+      "service": "openrouter",
+      "budget_limit": 50.0,
+      "current_spend": 0.0,
+      "requests_made": 7,
+      "requests_failed": 0
+    }
+  },
+  "last_updated": "2025-07-31T22:47:36.025541"
+}

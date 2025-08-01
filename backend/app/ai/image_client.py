@@ -144,11 +144,11 @@ class StableDiffusionClient:
         try:
             # Generate image based on provider
             result = await self._generate_with_provider(
-                provider=provider,
-                prompt=prompt,
-                size=size,
-                model=model,
-                settings=settings
+provider=provider,
+prompt=prompt,
+size=size,
+model=model,
+settings=settings
             )
             
             generation_time = time.time() - start_time
@@ -164,13 +164,13 @@ class StableDiffusionClient:
                     generation_time=generation_time,
                     provider_used=provider.value
                 )
-                
+
                 # Track usage
                 self.total_images += 1
                 self.total_cost += cost
                 self.requests_made += 1
                 self.provider_usage[provider] += 1
-                
+
                 # Save image if requested
                 image_path = None
                 if save_path and result.get("image_data"):
@@ -178,7 +178,7 @@ class StableDiffusionClient:
                         result["image_data"], 
                         save_path
                     )
-                
+
                 return {
                     "success": True,
                     "image_data": result["image_data"],
@@ -192,7 +192,7 @@ class StableDiffusionClient:
                 }
             else:
                 return result
-                
+
         except Exception as e:
             return {
                 "success": False,
@@ -213,7 +213,7 @@ class StableDiffusionClient:
         
         for provider in priority:
             if self._is_provider_available(provider):
-                return provider
+return provider
         
         return None
     
@@ -245,8 +245,8 @@ class StableDiffusionClient:
             return await self._generate_stability(prompt, size, model, settings)
         elif provider == ImageProvider.SEGMIND:
             return await self._generate_segmind(prompt, size, model, settings)
-        else:
-            return {"success": False, "error": "Unknown provider"}
+    else:
+        return {"success": False, "error": "Unknown provider"}
     
     async def _generate_runware(
         self,
@@ -281,26 +281,25 @@ class StableDiffusionClient:
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
-                
             if response.status == 200:
-                data = await response.json()
-                
-                # Runware returns image URL
-                if data.get("data") and len(data["data"]) > 0:
-                    image_url = data["data"][0].get("imageURL")
-                    
-                    # Download image data
-                    image_data = await self._download_image(image_url)
-                    
-                    return {
-                        "success": True,
-                        "image_data": image_data,
-                        "image_url": image_url
-                    }
-                else:
-                    return {"success": False, "error": "No image data in response"}
+data = await response.json()
+
+# Runware returns image URL
+if data.get("data") and len(data["data"]) > 0:
+image_url = data["data"][0].get("imageURL")
+    
+# Download image data
+image_data = await self._download_image(image_url)
+    
+                return {
+    "success": True,
+    "image_data": image_data,
+    "image_url": image_url
+                }
             else:
-                error_text = await response.text()
+                return {"success": False, "error": "No image data in response"}
+            else:
+error_text = await response.text()
                 return {"success": False, "error": f"Runware API error: {response.status} - {error_text}"}
     
     async def _generate_stability(
@@ -334,24 +333,23 @@ class StableDiffusionClient:
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
-                
             if response.status == 200:
-                data = await response.json()
-                
-                # Stability AI returns base64 encoded image
-                if data.get("images") and len(data["images"]) > 0:
-                    image_b64 = data["images"][0].get("base64")
-                    image_data = base64.b64decode(image_b64)
-                    
-                    return {
-                        "success": True,
-                        "image_data": image_data,
-                        "image_url": None
-                    }
-                else:
-                    return {"success": False, "error": "No image data in response"}
+data = await response.json()
+
+# Stability AI returns base64 encoded image
+if data.get("images") and len(data["images"]) > 0:
+    image_b64 = data["images"][0].get("base64")
+    image_data = base64.b64decode(image_b64)
+    
+                return {
+        "success": True,
+        "image_data": image_data,
+        "image_url": None
+    }
             else:
-                error_text = await response.text()  
+                return {"success": False, "error": "No image data in response"}
+            else:
+error_text = await response.text()  
                 return {"success": False, "error": f"Stability AI error: {response.status} - {error_text}"}
     
     async def _generate_segmind(
@@ -387,24 +385,23 @@ class StableDiffusionClient:
         connector = aiohttp.TCPConnector(ssl=False)  # Disable SSL verification for corporate environments
         async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=60)) as session:
             response = await session.post(url, headers=headers, json=payload)
-                
             if response.status == 200:
-                data = await response.json()
-                
-                # Segmind returns base64 encoded image
-                if data.get("image"):
-                    image_data = base64.b64decode(data["image"])
-                    
-                    return {
-                        "success": True,
-                        "image_data": image_data,
-                        "image_url": None,
-                        "seed": data.get("seed")
-                    }
-                else:
-                    return {"success": False, "error": "No image data in response"}
+data = await response.json()
+
+# Segmind returns base64 encoded image
+if data.get("image"):
+    image_data = base64.b64decode(data["image"])
+    
+                return {
+        "success": True,
+        "image_data": image_data,
+        "image_url": None,
+        "seed": data.get("seed")
+    }
             else:
-                error_text = await response.text()
+                return {"success": False, "error": "No image data in response"}
+            else:
+error_text = await response.text()
                 return {"success": False, "error": f"Segmind API error: {response.status} - {error_text}"}
     
     async def _download_image(self, image_url: str) -> bytes:
@@ -412,11 +409,9 @@ class StableDiffusionClient:
         
         connector = aiohttp.TCPConnector(ssl=False)
         async with aiohttp.ClientSession(connector=connector) as session:
-            async with session.get(image_url) as response:
-                if response.status == 200:
-                    return await response.read()
-                else:
-                    raise Exception(f"Failed to download image: {response.status}")
+            response = await session.get(image_url)
+response.raise_for_status()
+return await response.read()
     
     async def _save_image_file(self, image_data: bytes, file_path: str) -> str:
         """Save image data to file"""
@@ -439,7 +434,7 @@ class StableDiffusionClient:
             for provider, count in self.provider_usage.items()
         }
         
-        return {
+    return {
             "total_requests": self.requests_made,
             "total_images": self.total_images,
             "total_cost": round(self.total_cost, 4),
@@ -461,18 +456,18 @@ class StableDiffusionClient:
         )
         
         if result["success"]:
-            return {
-                "success": True,
-                "message": "Image generation connection successful",
-                "provider_used": result["provider"],
-                "generation_time": result["generation_time"],
-                "cost": result["usage"].total_cost
+        return {
+                    "success": True,
+"message": "Image generation connection successful",
+"provider_used": result["provider"],
+"generation_time": result["generation_time"],
+"cost": result["usage"].total_cost
             }
-        else:
-            return {
-                "success": False,
-                "error": result["error"],
-                "suggestion": "Check API keys and internet connection"
+    else:
+        return {
+"success": False,
+"error": result["error"],
+"suggestion": "Check API keys and internet connection"
             }
 
 
@@ -537,7 +532,7 @@ async def example_usage():
             print(f"Cost: ${result['usage'].total_cost:.4f}")
             print(f"Time: {result['generation_time']:.2f}s")
             print(f"Saved to: {result['image_path']}")
-        else:
+    else:
             print(f"Generation failed: {result['error']}")
         
         # Print usage stats

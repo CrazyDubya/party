@@ -1,0 +1,2 @@
+s/async with session.post(url, headers=headers, json=payload) as response:/response = await session.post(url, headers=headers, json=payload)/g
+s/async with session.get(image_url) as response:/response = await session.get(image_url)/g

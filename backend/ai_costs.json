@@ -89,16 +89,25 @@
       "cost": 0.000105,
       "task_type": "story_generation",
       "success": true
+    },
+    {
+      "timestamp": 1753990494.5524411,
+      "model": "elevenlabs-flash",
+      "input_tokens": 0,
+      "output_tokens": 1417,
+      "cost": 0.021255,
+      "task_type": "story_generation",
+      "success": true
     }
   ],
   "daily_budgets": {
     "2025-07-31": {
       "date": "2025-07-31",
       "budget_limit": 25.0,
-      "current_spend": 0.043578000000000006,
-      "requests_made": 10,
+      "current_spend": 0.064833,
+      "requests_made": 11,
       "requests_failed": 1
     }
   },
-  "last_updated": 1753987909.699269
+  "last_updated": 1753990494.552557
 }

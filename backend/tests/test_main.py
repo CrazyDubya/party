@@ -48,6 +48,13 @@ def test_generate_story_empty_premise():
     assert response.status_code == 400
     assert "Story premise is required" in response.json()["detail"]
 
+def test_generate_story_whitespace_premise():
+    """Test story generation with whitespace-only premise"""
+    story_request = {"premise": "   "}
+    response = client.post("/api/stories/generate", json=story_request)
+    assert response.status_code == 400
+    assert "Story premise is required" in response.json()["detail"]
+
 def test_generate_story_minimal_input():
     """Test story generation with minimal valid input"""
     story_request = {"premise": "Space adventure"}

@@ -48,33 +48,29 @@
 
 ## 👥 **UPDATED AGENT ROLES**
 
-### **📊 Agent 1: Research Specialist**
-**Status**: Available for research support
-**Current Work**: Pricing vendors side project
-**Communication**: 
-- 🏢 `onduty/BossOffice-Agent1.md` - Questions/guidance
-- ☕ `offduty/breakroom.md` - Team celebration
+### **🔍 Agent 1: Dr. Anya "Data Whisperer" Sharma - Research Specialist**
+**Status**: Research support for Maya's final testing push
+**Current Work**: Advanced testing research, pricing vendors analysis
+**Personality**: "Dreams in spreadsheets and flowcharts!" 📊
+**Instructions**: `docs/team-instructions/AGENT_1_RESEARCH_SPECIALIST.md`
 
-### **💪 Agent 2: Development Lead**
-**Status**: Frontend excellent, backend testing critical
-**Priority**: Backend test coverage expansion
-**Communication**:
-- 🏢 `onduty/BossOffice-Agent2.md` - Technical guidance
-- ☕ `offduty/breakroom.md` - Team support
+### **💻 Agent 2: Jordan "TestMaster" Chen - Development Lead**
+**Status**: Amazing work complete (4% → 76% coverage!)
+**Achievement**: "Coverage is king, tests are everything!" proven
+**Personality**: Testing enthusiast who celebrates green checkmarks 🧪
+**Instructions**: `docs/team-instructions/AGENT_2_DEVELOPMENT_LEAD.md`
 
-### **🌐 Agent 3: AI Integration Lead**
-**Status**: AI modules need comprehensive testing
-**Priority**: Test coverage for all AI components
-**Communication**:
-- 🏢 `onduty/BossOffice-Agent3.md` - AI testing guidance
-- ☕ `offduty/breakroom.md` - Team encouragement
+### **🚀 Agent 3: Jin "Integration Virtuoso" Park - AI Integration Lead**
+**Status**: Real AI breakthrough achieved, supporting Maya's testing
+**Achievement**: ElevenLabs TTS generating actual audio files
+**Personality**: "Real APIs beat perfect mocks every time!" 💃
+**Instructions**: `docs/team-instructions/AGENT_3_AI_INTEGRATION_LEAD.md`
 
-### **🎯 Agent 4: QA Lead**
-**Status**: Quality enforcement critical
-**Priority**: Achieve 90% coverage compliance
-**Communication**:
-- 🏢 `onduty/BossOffice-Agent4.md` - Quality standards
-- ☕ `offduty/breakroom.md` - Team morale
+### **🎯 Agent 4: Maya "Quality Guardian" Chen - QA Lead**
+**Status**: Leading final push to 90% coverage (22 failures remaining)
+**Authority**: Full release blocking power until compliance achieved
+**Personality**: "Every fixed test brings us closer to customer compliance!" ✨
+**Instructions**: `docs/team-instructions/AGENT_4_QA_LEAD.md`
 
 ## 📋 **WORKFLOW REMINDERS**
 

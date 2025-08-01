@@ -625,6 +625,24 @@ class TestConvenienceFunctions:
             assert result["generation_time"] == 5.5
 
 
+# Module level async test function
+@pytest.mark.asyncio
+async def test_speed():
+    """Test speed function at module level"""
+    mock_result = {
+        "test_completed": True,
+        "generation_time": 5.5,
+        "within_limit": True
+    }
+    
+    with patch('app.ai.story_generator.story_generator.test_generation_speed', return_value=mock_result):
+        from app.ai.story_generator import test_speed as actual_test_speed
+        result = await actual_test_speed()
+        
+        assert result["test_completed"] is True
+        assert result["generation_time"] == 5.5
+
+
 class TestTimeoutScenarios:
     """Test various timeout scenarios"""
     
@@ -637,12 +655,13 @@ class TestTimeoutScenarios:
             await asyncio.sleep(3)  # Longer than timeout
             return {"title": "Test", "chapters": []}
         
-        with patch.object(generator, '_generate_narrative_with_fallback', side_effect=slow_text_generation):
+        with patch.object(generator, '_determine_complexity', return_value=TaskComplexity.SIMPLE):
             with patch.object(generator.cost_optimizer, 'choose_optimal_model', return_value="test-model"):
-                result = await generator.generate_complete_story("Test")
-                
-                assert result["success"] is False
-                assert result["error"]["type"] == "timeout"
+                with patch.object(generator, '_generate_narrative_with_fallback', side_effect=slow_text_generation):
+                    result = await generator.generate_complete_story("Test")
+                    
+                    assert result["success"] is False
+                    assert result["error"]["type"] == "timeout"
     
     @pytest.mark.asyncio
     async def test_timeout_during_multimedia_generation(self):

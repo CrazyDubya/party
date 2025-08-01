@@ -82,7 +82,7 @@ class StoryQualityChecker:
                 "message": "Story has no chapters",
                 "severity": "critical"
             })
-            return QualityResult(False, 0, issues, [], 0, 0)
+            return QualityResult(False, 0, 0, 0, issues, 0, 0)
         
         # Word count check
         word_count = self._count_total_words(story)
