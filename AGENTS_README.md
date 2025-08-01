@@ -469,7 +469,7 @@ Our agent system represents the future of collaborative software development - w
 
 - Agent Personality Development Guide (under development)
 <!-- The Communication Protocol Reference file is missing. Link removed to avoid confusion. -->
-- [Performance Optimization Playbook](./project-notes/docs/performance-optimization.md)
+<!-- Performance Optimization Playbook link removed due to missing file -->
 - [Collaboration Framework Manual](./project-notes/docs/collaboration-frameworks.md)
 
 ---
