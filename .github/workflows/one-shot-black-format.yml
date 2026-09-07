@@ -1,5 +1,6 @@
 name: One-shot backend Black normalization
 
+# Retry after correcting pytest discovery and runtime dependencies.
 on:
   push:
     branches: [main]
