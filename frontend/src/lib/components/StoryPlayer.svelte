@@ -8,7 +8,7 @@
 
 <div class="story-player">
   {#if story.image}
-    <img src={story.image} alt="Story illustration" role="img" />
+    <img src={story.image} alt="Story illustration" />
   {/if}
   <p>{story.text}</p>
   <div class="choices">
@@ -19,11 +19,6 @@
 </div>
 
 <style>
-  .story-display {
-    margin: 2rem auto;
-    max-width: 500px;
-  }
-
   img {
     max-width: 100%;
   }
