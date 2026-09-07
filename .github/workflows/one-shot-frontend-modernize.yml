@@ -77,6 +77,10 @@ jobs:
         working-directory: ./frontend
         run: npm audit --audit-level=low
 
+      - name: Normalize with current Prettier
+        working-directory: ./frontend
+        run: npm run format
+
       - name: Verify formatting
         working-directory: ./frontend
         run: npm run lint
@@ -94,7 +98,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/package.json frontend/package-lock.json
+          git add frontend
           git diff --cached --check
           git commit -m "chore: modernize frontend toolchain"
           git push origin HEAD:main
