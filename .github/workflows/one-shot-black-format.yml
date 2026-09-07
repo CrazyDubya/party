@@ -65,9 +65,6 @@ jobs:
 
           tts_tests = "backend/tests/test_ai_tts_client.py"
           replace(tts_tests, "        # Cost difference should be 50% (Flash is 0.5, Multilingual is 1.0)\n        assert flash_credits * 2 == multi_credits", "        # Integer credit accounting can differ by one credit after truncation.\n        assert abs((flash_credits * 2) - multi_credits) <= 1")
-
-          ci = ".github/workflows/ci.yml"
-          replace(ci, "pytest --cov=app --cov-report=xml --cov-fail-under=90", "pytest --cov=app --cov-report=xml --cov-fail-under=75")
           PY
 
       - name: Normalize backend with Black
@@ -80,13 +77,12 @@ jobs:
         working-directory: ./backend
         run: pytest --cov=app --cov-report=xml --cov-fail-under=75
 
-      - name: Commit only after validation
+      - name: Commit validated backend source
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/one-shot-black-format.yml
-          git add -u backend .github/workflows/ci.yml
+          git add -u backend
           git diff --cached --check
           git commit -m "test: repair backend CI baseline"
           git push origin HEAD:main
