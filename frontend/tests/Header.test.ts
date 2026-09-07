@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/svelte';
-import Header from '$lib/components/Header.svelte';
+import { render, screen } from "@testing-library/svelte";
+import Header from "$lib/components/Header.svelte";
 
-it('renders the header', () => {
+it("renders the header", () => {
   render(Header);
-  expect(screen.getByText('AI Storyteller')).toBeInTheDocument();
+  expect(screen.getByText("AI Storyteller")).toBeInTheDocument();
 });
