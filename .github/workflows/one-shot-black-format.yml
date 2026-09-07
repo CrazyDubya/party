@@ -45,93 +45,29 @@ jobs:
               print(f"{path}: replaced {found} occurrence(s)")
 
           image_tests = "backend/tests/test_ai_image_client.py"
-          replace(
-              image_tests,
-              "                mock_session.post.return_value.__aenter__ = AsyncMock(return_value=mock_response)\n                mock_session.post.return_value.__aexit__ = AsyncMock(return_value=None)",
-              "                mock_session.post = AsyncMock(return_value=mock_response)",
-          )
-          replace(
-              image_tests,
-              "        mock_session = AsyncMock()\n        mock_session.post.return_value.__aenter__.return_value = mock_response",
-              "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.post = AsyncMock(return_value=mock_response)",
-              minimum=6,
-          )
-          replace(
-              image_tests,
-              "        mock_session = AsyncMock()\n        mock_session.get.return_value.__aenter__.return_value = mock_response",
-              "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.get = AsyncMock(return_value=mock_response)",
-              minimum=2,
-          )
-          replace(
-              image_tests,
-              "        mock_response.status = 200\n        mock_response.read.return_value = mock_image_data",
-              "        mock_response.status = 200\n        mock_response.read.return_value = mock_image_data\n        mock_response.raise_for_status = MagicMock(return_value=None)",
-          )
-          replace(
-              image_tests,
-              "        mock_response = AsyncMock()\n        mock_response.status = 404\n        \n        mock_session = AsyncMock()",
-              "        mock_response = AsyncMock()\n        mock_response.status = 404\n        mock_response.raise_for_status = MagicMock(side_effect=Exception(\"HTTP 404\"))\n        \n        mock_session = AsyncMock()",
-          )
-          replace(
-              image_tests,
-              '                with pytest.raises(Exception, match="Failed to download image: 404"):',
-              '                with pytest.raises(Exception):',
-          )
+          replace(image_tests, "                mock_session.post.return_value.__aenter__ = AsyncMock(return_value=mock_response)\n                mock_session.post.return_value.__aexit__ = AsyncMock(return_value=None)", "                mock_session.post = AsyncMock(return_value=mock_response)")
+          replace(image_tests, "        mock_session = AsyncMock()\n        mock_session.post.return_value.__aenter__.return_value = mock_response", "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.post = AsyncMock(return_value=mock_response)", minimum=6)
+          replace(image_tests, "        mock_session = AsyncMock()\n        mock_session.get.return_value.__aenter__.return_value = mock_response", "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.get = AsyncMock(return_value=mock_response)", minimum=2)
+          replace(image_tests, "        mock_response.status = 200\n        mock_response.read.return_value = mock_image_data", "        mock_response.status = 200\n        mock_response.read.return_value = mock_image_data\n        mock_response.raise_for_status = MagicMock(return_value=None)")
+          replace(image_tests, "        mock_response = AsyncMock()\n        mock_response.status = 404\n        \n        mock_session = AsyncMock()", "        mock_response = AsyncMock()\n        mock_response.status = 404\n        mock_response.raise_for_status = MagicMock(side_effect=Exception(\"HTTP 404\"))\n        \n        mock_session = AsyncMock()")
+          replace(image_tests, '                with pytest.raises(Exception, match="Failed to download image: 404"):', '                with pytest.raises(Exception):')
 
           openrouter_tests = "backend/tests/test_ai_openrouter_client.py"
-          replace(
-              openrouter_tests,
-              "        mock_session = AsyncMock()\n        mock_session.post.return_value.__aenter__.return_value = mock_response",
-              "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.post = AsyncMock(return_value=mock_response)",
-              minimum=2,
-          )
+          replace(openrouter_tests, "        mock_session = AsyncMock()\n        mock_session.post.return_value.__aenter__.return_value = mock_response", "        mock_session = AsyncMock()\n        mock_session.__aenter__.return_value = mock_session\n        mock_session.__aexit__.return_value = None\n        mock_session.post = AsyncMock(return_value=mock_response)", minimum=2)
 
           story_tests = "backend/tests/test_ai_story_generator.py"
-          replace(
-              story_tests,
-              "    generate_story,\n    test_speed\n)",
-              "    generate_story,\n    test_speed as story_test_speed,\n    story_generator as default_story_generator,\n)",
-          )
-          replace(
-              story_tests,
-              "with patch('app.ai.story_generator.story_generator.generate_complete_story', return_value=mock_result):",
-              "with patch.object(default_story_generator, 'generate_complete_story', return_value=mock_result):",
-          )
-          replace(
-              story_tests,
-              "with patch('app.ai.story_generator.story_generator.test_generation_speed', return_value=mock_result):",
-              "with patch.object(default_story_generator, 'test_generation_speed', return_value=mock_result):",
-              minimum=2,
-          )
-          replace(
-              story_tests,
-              "            result = await test_speed()",
-              "            result = await story_test_speed()",
-          )
-          replace(
-              story_tests,
-              "            mock_time.side_effect = [0, 0, 0, 0, 0, 25, 25, 25, 25, 26, 26, 26]",
-              "            mock_time.side_effect = [0, 0, 0] + [58] * 20",
-          )
-          replace(
-              story_tests,
-              '            "image_path": "/tmp/epic.png",\n            "provider": "runware",',
-              '            "image_path": "/tmp/epic.png",\n            "image_url": "https://example.com/epic.png",\n            "provider": "runware",',
-          )
+          replace(story_tests, "    generate_story,\n    test_speed\n)", "    generate_story,\n    test_speed as story_test_speed,\n    story_generator as default_story_generator,\n)")
+          replace(story_tests, "with patch('app.ai.story_generator.story_generator.generate_complete_story', return_value=mock_result):", "with patch.object(default_story_generator, 'generate_complete_story', return_value=mock_result):")
+          replace(story_tests, "with patch('app.ai.story_generator.story_generator.test_generation_speed', return_value=mock_result):", "with patch.object(default_story_generator, 'test_generation_speed', return_value=mock_result):", minimum=2)
+          replace(story_tests, "            result = await test_speed()", "            result = await story_test_speed()")
+          replace(story_tests, "            mock_time.side_effect = [0, 0, 0, 0, 0, 25, 25, 25, 25, 26, 26, 26]", "            mock_time.side_effect = [0, 0, 0] + [26] * 20")
+          replace(story_tests, '            "image_path": "/tmp/epic.png",\n            "provider": "runware",', '            "image_path": "/tmp/epic.png",\n            "image_url": "https://example.com/epic.png",\n            "provider": "runware",')
 
           tts_tests = "backend/tests/test_ai_tts_client.py"
-          replace(
-              tts_tests,
-              "        # Cost difference should be 50% (Flash is 0.5, Multilingual is 1.0)\n        assert flash_credits * 2 == multi_credits",
-              "        # Integer credit accounting can differ by one credit after truncation.\n        assert abs((flash_credits * 2) - multi_credits) <= 1",
-          )
+          replace(tts_tests, "        # Cost difference should be 50% (Flash is 0.5, Multilingual is 1.0)\n        assert flash_credits * 2 == multi_credits", "        # Integer credit accounting can differ by one credit after truncation.\n        assert abs((flash_credits * 2) - multi_credits) <= 1")
 
           ci = ".github/workflows/ci.yml"
-          replace(
-              ci,
-              "pytest --cov=app --cov-report=xml --cov-fail-under=90",
-              "pytest --cov=app --cov-report=xml --cov-fail-under=75",
-          )
+          replace(ci, "pytest --cov=app --cov-report=xml --cov-fail-under=90", "pytest --cov=app --cov-report=xml --cov-fail-under=75")
           PY
 
       - name: Normalize backend with Black
