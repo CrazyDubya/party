@@ -25,18 +25,37 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Modernize frontend dependency stack
+      - name: Prepare clean dependency manifest
         working-directory: ./frontend
         shell: bash
         run: |
-          npm uninstall \
-            @typescript-eslint/eslint-plugin \
-            @typescript-eslint/parser \
-            eslint \
-            eslint-config-prettier \
-            eslint-plugin-svelte \
-            @sveltejs/adapter-static
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
+          for (const key of [
+            '@typescript-eslint/eslint-plugin',
+            '@typescript-eslint/parser',
+            'eslint',
+            'eslint-config-prettier',
+            'eslint-plugin-svelte'
+          ]) delete p.devDependencies?.[key];
+
+          delete p.dependencies?.['@sveltejs/adapter-static'];
+          delete p.dependencies?.['@testing-library/jest-dom'];
+
+          p.scripts.lint = 'prettier --plugin=prettier-plugin-svelte --check .';
+          p.scripts.format = 'prettier --plugin=prettier-plugin-svelte --write .';
+          p.engines = { node: '>=24' };
+
+          fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
+          NODE
+
+          rm -rf node_modules package-lock.json
+
+      - name: Install modern frontend stack
+        working-directory: ./frontend
+        run: |
           npm install --save-dev \
             @sveltejs/adapter-auto@latest \
             @sveltejs/kit@latest \
@@ -52,10 +71,6 @@ jobs:
             typescript@^6.0.0 \
             vite@latest \
             vitest@latest
-
-          npm pkg set 'scripts.lint=prettier --plugin=prettier-plugin-svelte --check .'
-          npm pkg set 'scripts.format=prettier --plugin=prettier-plugin-svelte --write .'
-          npm pkg set 'engines.node=>=24'
 
       - name: Require clean npm audit
         working-directory: ./frontend
