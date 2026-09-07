@@ -90,7 +90,7 @@ jobs:
           replace(
               story_tests,
               "    generate_story,\n    test_speed\n)",
-              "    generate_story,\n    test_speed,\n    story_generator as default_story_generator,\n)",
+              "    generate_story,\n    test_speed as story_test_speed,\n    story_generator as default_story_generator,\n)",
           )
           replace(
               story_tests,
@@ -105,8 +105,13 @@ jobs:
           )
           replace(
               story_tests,
+              "            result = await test_speed()",
+              "            result = await story_test_speed()",
+          )
+          replace(
+              story_tests,
               "            mock_time.side_effect = [0, 0, 0, 0, 0, 25, 25, 25, 25, 26, 26, 26]",
-              "            mock_time.side_effect = [0, 0, 0, 58, 58, 58]",
+              "            mock_time.side_effect = [0, 0, 0] + [58] * 20",
           )
           replace(
               story_tests,
