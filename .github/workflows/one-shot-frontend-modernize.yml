@@ -73,6 +73,23 @@ jobs:
             vite@latest \
             vitest@latest
 
+      - name: Migrate Svelte component test resolution
+        working-directory: ./frontend
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'vite.config.js';
+          let text = fs.readFileSync(path, 'utf8');
+          if (!text.includes("@testing-library/svelte/vite")) {
+            text = text.replace(
+              'import { sveltekit } from "@sveltejs/kit/vite";\n',
+              'import { sveltekit } from "@sveltejs/kit/vite";\nimport { svelteTesting } from "@testing-library/svelte/vite";\n'
+            );
+          }
+          text = text.replace('plugins: [sveltekit()],', 'plugins: [sveltekit(), svelteTesting()],');
+          fs.writeFileSync(path, text);
+          NODE
+
       - name: Require clean npm audit
         working-directory: ./frontend
         run: npm audit --audit-level=low
