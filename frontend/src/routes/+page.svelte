@@ -4,10 +4,15 @@
   import StoryInputForm from "$lib/components/StoryInputForm.svelte";
   import StoryPlayer from "$lib/components/StoryPlayer.svelte";
 
+  /** @typedef {{ id: string, text: string, next: number }} GeneratedChoice */
+  /** @typedef {{ id: number, text: string, choices: GeneratedChoice[] }} GeneratedChapter */
+  /** @typedef {{ title: string, chapters: GeneratedChapter[] }} GeneratedStory */
+
   let premise = "";
   let mood = "";
   let characters = "";
   let isGenerating = false;
+  /** @type {GeneratedStory | null} */
   let generatedStory = null;
 
   async function generateStory() {
@@ -51,7 +56,7 @@
       on:submit={generateStory}
     />
   {:else}
-    <StoryPlayer bind:generatedStory {isGenerating} />
+    <StoryPlayer story={generatedStory} />
   {/if}
 </main>
 
