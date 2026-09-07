@@ -9,7 +9,7 @@ it("renders the story player", () => {
   };
   render(StoryPlayer, { story: story });
   expect(
-    screen.getByText("A cyberpunk detective walks through neon-lit streets.")
+    screen.getByText("A cyberpunk detective walks through neon-lit streets."),
   ).toBeInTheDocument();
   expect(screen.getByText("Follow the suspect")).toBeInTheDocument();
   expect(screen.getByText("Check the alley")).toBeInTheDocument();
