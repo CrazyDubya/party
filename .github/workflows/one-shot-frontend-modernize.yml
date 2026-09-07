@@ -49,7 +49,7 @@ jobs:
             svelte@latest \
             svelte-check@latest \
             tslib@latest \
-            typescript@latest \
+            typescript@^6.0.0 \
             vite@latest \
             vitest@latest
 
