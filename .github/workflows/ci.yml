@@ -6,26 +6,40 @@ on:
   pull_request:
     branches: [main, staging, production]
 
+permissions:
+  contents: read
+
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '24'
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm ci
 
-      - name: Run frontend linting
+      - name: Audit frontend dependencies
+        working-directory: ./frontend
+        run: npm audit --audit-level=high
+
+      - name: Run frontend formatting check
         working-directory: ./frontend
         run: npm run lint
+
+      - name: Run frontend type and Svelte checks
+        working-directory: ./frontend
+        run: npm run check
 
       - name: Run frontend tests with coverage
         working-directory: ./frontend
@@ -38,12 +52,17 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.9'
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
 
       - name: Install backend dependencies
         working-directory: ./backend
@@ -51,7 +70,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run backend linting
+      - name: Run backend formatting check
         working-directory: ./backend
         run: black --check .
 
@@ -64,7 +83,10 @@ jobs:
     needs: [test-frontend, test-backend]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Deploy to staging
         run: echo "Deploy to staging environment"
         # TODO: Add actual staging deployment
@@ -74,7 +96,10 @@ jobs:
     needs: [test-frontend, test-backend]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Deploy to production
         run: echo "Deploy to production environment"
         # TODO: Add actual production deployment
