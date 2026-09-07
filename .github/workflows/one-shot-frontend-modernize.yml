@@ -1,0 +1,84 @@
+name: One-shot frontend modernization
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/one-shot-frontend-modernize.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  modernize-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Modernize frontend dependency stack
+        working-directory: ./frontend
+        shell: bash
+        run: |
+          npm uninstall \
+            @typescript-eslint/eslint-plugin \
+            @typescript-eslint/parser \
+            eslint \
+            eslint-config-prettier \
+            eslint-plugin-svelte \
+            @sveltejs/adapter-static
+
+          npm install --save-dev \
+            @sveltejs/adapter-auto@latest \
+            @sveltejs/kit@latest \
+            @testing-library/jest-dom@latest \
+            @testing-library/svelte@latest \
+            @vitest/coverage-v8@latest \
+            jsdom@latest \
+            prettier@latest \
+            prettier-plugin-svelte@latest \
+            svelte@latest \
+            svelte-check@latest \
+            tslib@latest \
+            typescript@latest \
+            vite@latest \
+            vitest@latest
+
+          npm pkg set 'scripts.lint=prettier --plugin=prettier-plugin-svelte --check .'
+          npm pkg set 'scripts.format=prettier --plugin=prettier-plugin-svelte --write .'
+          npm pkg set 'engines.node=>=24'
+
+      - name: Require clean npm audit
+        working-directory: ./frontend
+        run: npm audit --audit-level=low
+
+      - name: Verify formatting
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Run frontend tests with coverage
+        working-directory: ./frontend
+        run: npm run test:coverage
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Commit validated modernization
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/package.json frontend/package-lock.json
+          git diff --cached --check
+          git commit -m "chore: modernize frontend toolchain"
+          git push origin HEAD:main
