@@ -47,6 +47,7 @@ jobs:
           p.scripts.lint = 'prettier --plugin=prettier-plugin-svelte --check .';
           p.scripts.format = 'prettier --plugin=prettier-plugin-svelte --write .';
           p.engines = { node: '>=24' };
+          p.overrides = { ...(p.overrides || {}), cookie: '0.7.2' };
 
           fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
           NODE
