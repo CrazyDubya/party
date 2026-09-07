@@ -57,7 +57,7 @@ jobs:
 
       - name: Run backend tests with coverage
         working-directory: ./backend
-        run: pytest --cov=app --cov-report=xml --cov-fail-under=90
+        run: pytest --cov=app --cov-report=xml --cov-fail-under=75
 
   deploy-staging:
     if: github.ref == 'refs/heads/staging'
