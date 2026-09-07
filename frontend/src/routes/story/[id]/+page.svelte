@@ -4,8 +4,8 @@
   import StoryPlayer from "$lib/components/StoryPlayer.svelte";
 
   // This will be loaded from the backend in a later milestone
-  let generatedStory = {
-    title: `Story: Mock Story`,
+  const generatedStory = {
+    title: "Story: Mock Story",
     chapters: [
       {
         id: 1,
@@ -22,7 +22,7 @@
 <Header />
 
 <main>
-  <StoryPlayer {generatedStory} />
+  <StoryPlayer story={generatedStory} />
 </main>
 
 <Footer />
